@@ -1,51 +1,66 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as PlaylistsActions } from '../../store/ducks/playlists';
+
+import Loading from '../../components/Loading';
 
 import { Container, Title, List, Playlist } from './styles';
 
-const Browse = () => {
-    return (
-        <Container>
-            <Title>Navegar</Title>
-            <List>
-                <Playlist to="/playlists/1">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM5XrW6k2_AuAzqFIqjYE8eKZozLS9KYj6QeHGvpFcxI9zP9XzSw"
-                        alt="playlist"
-                        srcset=""
-                    />
-                    <strong>Rock Pesado</strong>
-                    <p>Ouca as melhores do rock atualmente!</p>
-                </Playlist>
-                <Playlist to="/playlists/1">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM5XrW6k2_AuAzqFIqjYE8eKZozLS9KYj6QeHGvpFcxI9zP9XzSw"
-                        alt="playlist"
-                        srcset=""
-                    />
-                    <strong>Rock Pesado</strong>
-                    <p>Ouca as melhores do rock atualmente!</p>
-                </Playlist>
-                <Playlist to="/playlists/1">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM5XrW6k2_AuAzqFIqjYE8eKZozLS9KYj6QeHGvpFcxI9zP9XzSw"
-                        alt="playlist"
-                        srcset=""
-                    />
-                    <strong>Rock Pesado</strong>
-                    <p>Ouca as melhores do rock atualmente!</p>
-                </Playlist>
-                <Playlist to="/playlists/1">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM5XrW6k2_AuAzqFIqjYE8eKZozLS9KYj6QeHGvpFcxI9zP9XzSw"
-                        alt="playlist"
-                        srcset=""
-                    />
-                    <strong>Rock Pesado</strong>
-                    <p>Ouca as melhores do rock atualmente!</p>
-                </Playlist>
-            </List>
-        </Container>
-    );
-};
+class Browse extends Component {
+    static propTypes = {
+        getPlaylistsRequest: PropTypes.func.isRequired,
+        playlists: PropTypes.shape({
+            data: PropTypes.arrayOf(
+                PropTypes.shape({
+                    id: PropTypes.number,
+                    title: PropTypes.string,
+                    thumbnail: PropTypes.string,
+                    description: PropTypes.string
+                })
+            ),
+            loading: PropTypes.bool
+        }).isRequired
+    };
+    componentDidMount() {
+        this.props.getPlaylistsRequest();
+    }
+    render() {
+        return (
+            <Container>
+                <Title>
+                    Navegar {this.props.playlists.loading && <Loading />}
+                </Title>
+                <List>
+                    {this.props.playlists.data.map(playlist => (
+                        <Playlist
+                            key={playlist.id}
+                            to={`/playlists/${playlist.id}`}>
+                            <img
+                                src={playlist.thumbnail}
+                                alt={playlist.title}
+                                srcset=""
+                            />
+                            <strong>{playlist.title}</strong>
+                            <p>{playlist.description}</p>
+                        </Playlist>
+                    ))}
+                </List>
+            </Container>
+        );
+    }
+}
 
-export default Browse;
+const mapStateToProps = state => ({
+    playlists: state.playlists
+});
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(PlaylistsActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Browse);
