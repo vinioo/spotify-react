@@ -7,12 +7,12 @@ export function* getPlaylistDetails(action) {
     try {
         const response = yield call(
             API.get,
-            `/playlists/${action.playload.id}?_embed=songs`
+            `http://localhost:3001/playlists/${action.payload.id}?_embed=songs`
         );
         yield put(
             PlaylistDetailsActions.getPlaylistDetailsSuccess(response.data)
         );
     } catch (error) {
-        console.log(error);
+        console.tron.log(error);
     }
 }
