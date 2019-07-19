@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components'
-import 'rc-slider/assets/index.css'
+import { createGlobalStyle } from 'styled-components';
+import 'rc-slider/assets/index.css';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -21,6 +21,9 @@ const GlobalStyle = createGlobalStyle`
         color: #FFF;
         padding: 0;
     }
-`;
-export default GlobalStyle
 
+    button {
+        cursor: pointer;
+    }
+`;
+export default GlobalStyle;
