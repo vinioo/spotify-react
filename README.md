@@ -4,7 +4,7 @@ This repository contains a Spotify Clone made with reactJS.
 
 ## What i've learned?
 - Flux architecture.
-- State management using Redux and Redux saga
+- State management using Redux and Redux saga.
 - Reactotron debugging.
 - React Sound library.
 - Json-server.
